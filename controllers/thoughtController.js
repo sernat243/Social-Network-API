@@ -24,15 +24,6 @@ const getThoughtById = async (req, res) => {
   }
 };
 
-const createThought = async (req, res) => {
-  try {
-    const thought = await Thought.create(req.body);
-    res.status(201).json(thought);
-  } catch (err) {
-    res.status(400).json(err);
-  }
-};
-
 const updateThought = async (req, res) => {
   try {
     const { id } = req.params;

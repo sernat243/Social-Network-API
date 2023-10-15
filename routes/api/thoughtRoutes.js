@@ -8,9 +8,6 @@ router.get('/', thoughtController.getThoughts);
 // Route for getting a single thought by _id
 router.get('/:id', thoughtController.getThoughtById);
 
-// Route for creating a new thought
-router.post('/', thoughtController.createThought);
-
 // Route for updating a thought by _id
 router.put('/:id', thoughtController.updateThought);
 

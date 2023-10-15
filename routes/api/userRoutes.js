@@ -5,7 +5,7 @@ const userController = require('../../controllers/userController');
 // Route for getting all users
 router.get('/', userController.getUsers);
 
-// Route for getting a single user by _id and populating thought and friend data
+// Route for getting a single user by _id and populating friend data
 router.get('/:id', userController.getUserById);
 
 // Route for creating a new user
@@ -17,7 +17,7 @@ router.put('/:id', userController.updateUser);
 // Route for deleting a user by _id
 router.delete('/:id', userController.deleteUser);
 
-// Bonus: Remove a user's associated thoughts when deleted
-//router.delete('/:userId/thoughts/:thoughtId', userController.removeUserThought);
+// Route for creating a new thought for a user
+router.post('/:userId/thoughts', userController.createThought);
 
 module.exports = router;

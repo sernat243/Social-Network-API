@@ -13,7 +13,7 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId).populate('thoughts').populate('friends');
+    const user = await User.findById(userId).populate('friends');
   
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -64,10 +64,32 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const createThought = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const thought = await Thought.create(req.body);
+
+    // Add the thought's ObjectId to the user's "thoughts" array
+    user.thoughts.push(thought._id);
+    await user.save();
+
+    res.status(201).json(thought);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser,
+  createThought,
 };
