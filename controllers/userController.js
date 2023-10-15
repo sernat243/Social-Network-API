@@ -3,7 +3,16 @@ const Thought = require('../models/thoughtModel');
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find()
+      .populate({
+        path: 'friends',
+        select: 'username', // Populate only the username field of friends
+      })
+      .populate({
+        path: 'thoughts',
+        select: 'thoughtText', // Populate only the thoughtText field of thoughts
+      });
+
     res.json(users);
   } catch (err) {
     res.status(500).json(err);
@@ -13,12 +22,21 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId).populate('friends');
-  
+
+    const user = await User.findById(userId)
+      .populate({
+        path: 'friends',
+        select: 'username', // Populate only the username field of friends
+      })
+      .populate({
+        path: 'thoughts',
+        select: 'thoughtText', // Populate only the thoughtText field of thoughts
+      });
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-  
+
     res.json(user);
   } catch (err) {
     res.status(500).json(err);
