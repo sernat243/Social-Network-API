@@ -85,6 +85,51 @@ const createThought = async (req, res) => {
   }
 };
 
+const addFriend = async (req, res) => {
+  try {
+    const { userId, friendId } = req.params;
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({ message: 'User or friend not found' });
+    }
+
+    // Check if the friend is not already in the user's friends list
+    if (!user.friends.includes(friendId)) {
+      user.friends.push(friendId);
+      await user.save();
+      res.status(200).json(user);
+    } else {
+      res.status(400).json({ message: 'Friend already in the user\'s friend list' });
+    }
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+const removeFriend = async (req, res) => {
+  try {
+    const { userId, friendId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if the friend is in the user's friends list
+    if (user.friends.includes(friendId)) {
+      user.friends = user.friends.filter((friend) => friend.toString() !== friendId);
+      await user.save();
+      res.status(200).json(user);
+    } else {
+      res.status(400).json({ message: 'Friend not found in the user\'s friend list' });
+    }
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -92,4 +137,6 @@ module.exports = {
   updateUser,
   deleteUser,
   createThought,
+  addFriend,
+  removeFriend,
 };

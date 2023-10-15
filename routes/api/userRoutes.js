@@ -20,4 +20,10 @@ router.delete('/:id', userController.deleteUser);
 // Route for creating a new thought for a user
 router.post('/:userId/thoughts', userController.createThought);
 
+// Route for adding a new friend to a user's friend list
+router.post('/:userId/friends/:friendId', userController.addFriend);
+
+// Route for removing a friend by their ID
+router.delete('/:userId/friends/:friendId', userController.removeFriend);
+
 module.exports = router;
